@@ -16,18 +16,39 @@ const db = getDatabase(app);
 const rt = ref(db, "CARTA");
 
 let cartaM = document.getElementById("carta");
+let buscar = document.getElementById("buscar");
 let datos;
+let snapshotCarta;
 
 onValue(rt, (snapshot) => {
-if (snapshot.exists()) {
-snapshot.forEach((elemento) => {
-datos = elemento.val();
-cartaM.innerHTML += `
-<div class="plato">
-<h3>${datos.nombre}</h3>
-<p class="contenido">${datos.contenido}</p>
-<p class="precio">$${datos.precio}</p>
-</div>`;
+    snapshotCarta = snapshot;
+    buscarPlato();
 });
+
+function buscarPlato() {
+    cartaM.innerHTML = "";
+    let texto = buscar.value.toLowerCase();
+    let encontrados = 0;
+    if (snapshotCarta && snapshotCarta.exists()) {
+        snapshotCarta.forEach((elemento) => {
+            datos = elemento.val();
+            if (
+                datos.nombre.toLowerCase().indexOf(texto) != -1 ||
+                datos.contenido.toLowerCase().indexOf(texto) != -1
+            ) {
+                cartaM.innerHTML += `
+                <div class="plato">
+                    <h3>${datos.nombre}</h3>
+                    <p class="contenido">${datos.contenido}</p>
+                    <p class="precio">$${datos.precio}</p>
+                </div>`;
+
+                encontrados++;
+            }
+        });
+    }
+    if (encontrados == 0) {
+        cartaM.innerHTML = "<p>No se encontraron platos.</p>";
+    }
 }
-});
+window.buscarPlato = buscarPlato;
