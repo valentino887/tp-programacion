@@ -33,8 +33,7 @@ function buscarPlato() {
         snapshotCarta.forEach((elemento) => {
             datos = elemento.val();
             if (
-                datos.nombre.toLowerCase().indexOf(texto) != -1 ||
-                datos.contenido.toLowerCase().indexOf(texto) != -1
+                datos.nombre.toLowerCase().indexOf(texto) != -1 || datos.contenido.toLowerCase().indexOf(texto) != -1
             ) {
                 cartaM.innerHTML += `
                 <div class="plato">
